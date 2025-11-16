@@ -1,7 +1,16 @@
-import { useTheme } from '@/hooks/useTheme'
+import { ColorScheme, useTheme } from '@/hooks/useTheme'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+  Keyboard,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Home() {
@@ -10,53 +19,56 @@ export default function Home() {
   const { colors } = useTheme()
 
   const cities = ['London', 'Tokyo', 'New York'] // placeholder list
+  const emptyCities = []
 
   const styles = getStyles(colors)
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Weather</Text>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.header}>Weather</Text>
 
-      <TextInput
-        style={styles.search}
-        placeholder='Search city'
-        placeholderTextColor={colors.text + '80'}
-        value={search}
-        onChangeText={setSearch}
-      />
-      <ScrollView style={styles.scrollContent}>
-        {cities.map((item) => (
-          <Pressable
-            key={item}
-            style={styles.cityCard}
-            onPress={() => router.push(`/city/${item}`)}
-          >
-            <Text style={styles.cityName}>{item}</Text>
-          </Pressable>
-        ))}
+        <TextInput
+          style={styles.search}
+          placeholder='Search for a city in the US...'
+          placeholderTextColor={colors.textMuted + '80'}
+          value={search}
+          onChangeText={setSearch}
+        />
+        <ScrollView style={styles.scrollContent}>
+          {cities.map((item) => (
+            <Pressable
+              key={item}
+              style={styles.cityCard}
+              onPress={() => router.push(`/city/${item}`)}
+            >
+              <Text style={styles.cityName}>{item}</Text>
+            </Pressable>
+          ))}
 
-        <Text style={styles.header}>Storm Watch</Text>
-        <View style={styles.stormBox}>
-          <Text style={styles.stormText}>No active alerts</Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <Text style={styles.header}>Storm Watch</Text>
+          <View style={styles.stormBox}>
+            <Text style={styles.stormText}>No active alerts</Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   )
 }
 
-const getStyles = (colors: { background: string; text: string }) =>
+const getStyles = (colors: ColorScheme) =>
   StyleSheet.create({
     scrollContent: {},
-    container: { flex: 1, padding: 20, backgroundColor: colors.background },
+    container: { flex: 1, padding: 20, backgroundColor: colors.bg },
     header: { fontSize: 32, fontWeight: 'bold', marginBottom: 20, color: colors.text },
     search: {
       borderWidth: 1,
       borderColor: colors.text + '40',
-      backgroundColor: colors.background,
+      backgroundColor: colors.bg,
       color: colors.text,
       padding: 12,
       borderRadius: 10,
-      marginBottom: 20,
+      marginBottom: 30,
     },
     sectionTitle: { fontSize: 20, fontWeight: '600', marginVertical: 10, color: colors.text },
     cityCard: {
@@ -64,7 +76,7 @@ const getStyles = (colors: { background: string; text: string }) =>
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.text + '30',
-      backgroundColor: colors.background,
+      backgroundColor: colors.bg,
       marginBottom: 10,
     },
     cityName: { fontSize: 18, color: colors.text },

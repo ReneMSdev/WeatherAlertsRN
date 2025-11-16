@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme'
+import { ColorScheme, useTheme } from '@/hooks/useTheme'
 import { StyleSheet, Switch, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -21,12 +21,12 @@ export default function Settings() {
   )
 }
 
-const getStyles = (colors: { background: string; text: string }) =>
+const getStyles = (colors: ColorScheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      backgroundColor: colors.background,
+      backgroundColor: colors.bg,
     },
     header: {
       fontSize: 32,
