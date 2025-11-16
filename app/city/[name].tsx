@@ -1,12 +1,19 @@
 // app/city/[name].js
-import { useLocalSearchParams } from 'expo-router'
-import { StyleSheet, Text, View } from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 export default function CityDetailPlaceholder() {
   const { name } = useLocalSearchParams()
+  const router = useRouter()
 
   return (
     <View style={styles.container}>
+      <Pressable
+        onPress={() => router.back()}
+        style={{ marginBottom: 20 }}
+      >
+        <Text style={{ fontSize: 18 }}>← Back</Text>
+      </Pressable>
       <Text style={styles.title}>{name}</Text>
 
       <View style={styles.box}>

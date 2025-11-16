@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Home() {
   const router = useRouter()
@@ -9,7 +10,7 @@ export default function Home() {
   const cities = ['London', 'Tokyo', 'New York'] // placeholder list
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Weather</Text>
 
       <TextInput
@@ -18,31 +19,28 @@ export default function Home() {
         value={search}
         onChangeText={setSearch}
       />
-
-      <Text style={styles.sectionTitle}>Locations</Text>
-
-      <FlatList
-        data={cities}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
+      <ScrollView style={styles.scrollContent}>
+        {cities.map((item) => (
           <Pressable
+            key={item}
             style={styles.cityCard}
             onPress={() => router.push(`/city/${item}`)}
           >
             <Text style={styles.cityName}>{item}</Text>
           </Pressable>
-        )}
-      />
+        ))}
 
-      <Text style={styles.sectionTitle}>Storm Watch</Text>
-      <View style={styles.stormBox}>
-        <Text>No active alerts</Text>
-      </View>
-    </View>
+        <Text style={styles.header}>Storm Watch</Text>
+        <View style={styles.stormBox}>
+          <Text>No active alerts</Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  scrollContent: {},
   container: { flex: 1, padding: 20 },
   header: { fontSize: 32, fontWeight: 'bold', marginBottom: 20 },
   search: {
