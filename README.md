@@ -39,7 +39,7 @@ cd weather-alerts-app
 
 Create a .env file in the root with any required API URLs or keys:
 
-BACKEND_URL=https://your-backend-url.com
+`BACKEND_URL=https://your-backend-url.com`
 
 ### Run the app
 
