@@ -1,14 +1,11 @@
-import { useState } from 'react'
-import { StyleSheet, Switch, Text, View, useColorScheme } from 'react-native'
+import { useTheme } from '@/hooks/useTheme'
+import { StyleSheet, Switch, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Settings() {
-  const systemColorScheme = useColorScheme() // 'light' or 'dark'
-  const [darkMode, setDarkMode] = useState(systemColorScheme === 'dark')
+  const { isDarkMode, toggleDarkMode, colors } = useTheme()
 
-  const toggleDarkMode = () => setDarkMode(!darkMode)
-
-  const styles = getStyles(darkMode)
+  const styles = getStyles(colors)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -16,7 +13,7 @@ export default function Settings() {
       <View style={styles.row}>
         <Text style={styles.label}>Dark Mode</Text>
         <Switch
-          value={darkMode}
+          value={isDarkMode}
           onValueChange={toggleDarkMode}
         />
       </View>
@@ -24,18 +21,18 @@ export default function Settings() {
   )
 }
 
-const getStyles = (dark: boolean) =>
+const getStyles = (colors: { background: string; text: string }) =>
   StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      backgroundColor: dark ? '#111827' : '#cbd5e1',
+      backgroundColor: colors.background,
     },
     header: {
       fontSize: 32,
       fontWeight: 'bold',
       marginBottom: 20,
-      color: dark ? '#fff' : '#000',
+      color: colors.text,
     },
     row: {
       flexDirection: 'row',
@@ -45,6 +42,6 @@ const getStyles = (dark: boolean) =>
     },
     label: {
       fontSize: 18,
-      color: dark ? '#fff' : '#000',
+      color: colors.text,
     },
   })
