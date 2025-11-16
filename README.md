@@ -18,7 +18,7 @@ A React Native Expo app for displaying real-time weather alerts and conditions f
 
 - Language: TypeScript
 
-- Navigation: Expo Router / React Navigation
+- Navigation: Expo Router
 
 - API: Fetches data from Weather Alerts Backend
 
