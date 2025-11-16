@@ -1,50 +1,59 @@
-# Welcome to your Expo app 👋
+🌦️ Weather Alerts App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native Expo app for displaying real-time weather alerts and conditions fetched from the Weather Alerts Backend. Users can view alerts and conditions in an easy-to-read mobile interface.
 
-## Get started
+🚀 Features
 
-1. Install dependencies
+Displays Weather Data: Fetches and shows current weather conditions from the backend.
 
-   ```bash
-   npm install
-   ```
+Alerts Overview: Lists active weather alerts for the user’s location.
 
-2. Start the app
+Responsive UI: Mobile-friendly design with safe area support and smooth navigation.
 
-   ```bash
-   npx expo start
-   ```
+Expo Integration: Built with Expo, making setup and deployment simple.
 
-In the output, you'll find options to open the app in a
+🛠️ Tech Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Framework: React Native + Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Language: TypeScript
 
-## Get a fresh project
+Navigation: Expo Router / React Navigation
 
-When you're ready, run:
+API: Fetches data from Weather Alerts Backend
 
-```bash
-npm run reset-project
-```
+⚡ Getting Started
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Clone the repo
 
-## Learn more
+git clone https://github.com/yourusername/weather-alerts-app.git
+cd weather-alerts-app
 
-To learn more about developing your project with Expo, look at the following resources:
+Install dependencies
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+npm install
 
-## Join the community
+Set up environment variables (if needed)
+Create a .env file in the root with any required API URLs or keys:
 
-Join our community of developers creating universal apps.
+BACKEND_URL=https://your-backend-url.com
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Run the app
+
+npx expo start --tunnel
+
+This will open the Expo Dev Tools. You can scan the QR code with your mobile device or use an emulator.
+
+📦 Scripts
+
+npm start – Starts the Expo development server
+
+npm run android – Opens the app on an Android emulator/device
+
+npm run ios – Opens the app on an iOS simulator/device (Mac only)
+
+🔗 References
+
+Expo Documentation
+
+React Native Documentation
