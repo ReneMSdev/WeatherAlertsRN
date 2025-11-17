@@ -46,7 +46,7 @@ export default function Home() {
             </Pressable>
           ))}
 
-          <Text style={styles.header}>Storm Watch</Text>
+          <Text style={[styles.header, styles.headerStorm]}>Storm Watch</Text>
           <View style={styles.stormBox}>
             <Text style={styles.stormText}>No active alerts</Text>
           </View>
@@ -58,7 +58,7 @@ export default function Home() {
 
 const getStyles = (colors: ColorScheme) =>
   StyleSheet.create({
-    scrollContent: {},
+    scrollContent: { flex: 1 },
     container: { flex: 1, padding: 20, backgroundColor: colors.bg },
     header: { fontSize: 32, fontWeight: 'bold', marginBottom: 20, color: colors.text },
     search: {
@@ -80,6 +80,9 @@ const getStyles = (colors: ColorScheme) =>
       marginBottom: 10,
     },
     cityName: { fontSize: 18, color: colors.text },
+    headerStorm: {
+      marginTop: 30,
+    },
     stormBox: {
       padding: 20,
       backgroundColor: colors.text + '10',

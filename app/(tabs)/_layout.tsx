@@ -30,11 +30,11 @@ export default function Layout() {
         name='index'
         options={{
           title: 'Home',
-          tabBarIcon: () => (
+          tabBarIcon: ({ color }) => (
             <Ionicons
               name='home-outline'
               size={28}
-              color={colors.text}
+              color={color}
             />
           ),
         }}
@@ -44,11 +44,11 @@ export default function Layout() {
         name='settings'
         options={{
           title: 'Settings',
-          tabBarIcon: () => (
+          tabBarIcon: ({ color }) => (
             <Ionicons
               name='settings-outline'
               size={28}
-              color={colors.text}
+              color={color}
             />
           ),
         }}
