@@ -17,7 +17,7 @@ export default function SplashScreen() {
   }, [])
 
   const handleContinue = () => {
-    router.push('/(tabs)') // navigate to home page
+    router.push('/(tabs)/home') // navigate to home page
   }
 
   return (
@@ -46,7 +46,7 @@ const getStyles = (colors: ColorScheme) =>
       backgroundColor: colors.bg, // adjust as needed
 
       alignItems: 'center',
-      paddingTop: 150,
+      paddingTop: 180,
     },
     logo: {
       fontSize: 120,
