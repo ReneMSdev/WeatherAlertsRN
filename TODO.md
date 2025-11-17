@@ -1,4 +1,4 @@
-- [ ] Splash/Login UI (continue as guest link)
+- [x] Splash/Login UI (continue as guest link)
 - [ ] Device ID Generation & Local Storage
   - generate uuid and store locally with AsyncStorage
   - subsequent app launches can read from storage to reuse the same ID

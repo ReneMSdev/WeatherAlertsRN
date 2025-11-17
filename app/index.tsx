@@ -1,7 +1,8 @@
 import { ColorScheme, useTheme } from '@/hooks/useTheme'
+import { getOrCreateDeviceId } from '@/utils/deviceId'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function SplashScreen() {
@@ -11,13 +12,18 @@ export default function SplashScreen() {
 
   // Optional: placeholder for background tasks
   useEffect(() => {
-    // Example: generate device ID, request permissions
-    // async function setup() { ... }
-    // setup();
+    // Background tasks can be added here if needed
   }, [])
 
-  const handleContinue = () => {
-    router.push('/(tabs)/home') // navigate to home page
+  const handleContinueAsGuest = async (): Promise<void> => {
+    try {
+      const deviceId: string = await getOrCreateDeviceId()
+      console.log('Device ID:', deviceId)
+      router.replace('/(tabs)/home')
+    } catch (error) {
+      console.error('Error setting up deviceId:', error)
+      Alert.alert('Error', 'Failed to continue as guest. Please try again.')
+    }
   }
 
   return (
@@ -31,7 +37,7 @@ export default function SplashScreen() {
       {/* Continue Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={handleContinue}
+        onPress={handleContinueAsGuest}
       >
         <Text style={styles.buttonText}>Continue as Guest</Text>
       </TouchableOpacity>
