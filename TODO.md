@@ -2,8 +2,10 @@
 - [x] Device ID Generation & Local Storage
   - generate uuid and store locally with AsyncStorage
   - subsequent app launches can read from storage to reuse the same ID
+- [x] Backend POST
+
+  - function to POST deviceId
+
 - [ ] Permissions
   - Location requests
   - store permission result in AsyncStorage until backend integration is ready
-- [ ] Backend POST
-  - function to POST deviceId + location/city

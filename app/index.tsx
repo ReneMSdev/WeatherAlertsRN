@@ -1,8 +1,16 @@
 import { ColorScheme, useTheme } from '@/hooks/useTheme'
 import { getOrCreateDeviceId } from '@/utils/deviceId'
+import * as Device from 'expo-device'
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import {
+  ActivityIndicator,
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function SplashScreen() {
@@ -12,6 +20,12 @@ export default function SplashScreen() {
   const { colors } = useTheme()
   const styles = getStyles(colors)
 
+  // Device Variables
+  const deviceUrl = process.env.EXPO_PUBLIC_DEVICE_URL
+  if (!deviceUrl) throw new Error('Missing device api url...')
+  const platform = Platform.OS
+  const osVersion = Device.osVersion
+
   // Optional: placeholder for background tasks
   useEffect(() => {
     // Background tasks can be added here if needed
@@ -20,8 +34,21 @@ export default function SplashScreen() {
   const handleContinueAsGuest = async (): Promise<void> => {
     try {
       setIsLoading(true) // show spinner
+
       const deviceId: string = await getOrCreateDeviceId()
-      console.log('Device ID:', deviceId)
+
+      const res = await fetch(deviceUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          deviceId,
+          platform,
+          osVersion,
+          pushToken: null,
+        }),
+      })
       router.replace('/(tabs)/home')
     } catch (error) {
       console.error('Error setting up deviceId:', error)
