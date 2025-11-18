@@ -1,7 +1,9 @@
 import { ColorScheme, useTheme } from '@/hooks/useTheme'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
+  Animated,
   Keyboard,
   Pressable,
   ScrollView,
@@ -11,46 +13,81 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Home() {
   const router = useRouter()
   const [search, setSearch] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
   const { colors } = useTheme()
+  const styles = getStyles(colors)
+  const insets = useSafeAreaInsets()
+
+  const translateY = useRef(new Animated.Value(0)).current
+
+  const handleFocus = () => {
+    setIsFocused(true)
+    Animated.timing(translateY, {
+      toValue: -insets.top,
+      duration: 200,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  const handleBlur = () => {
+    setIsFocused(false)
+    Animated.timing(translateY, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start()
+  }
 
   const cities = ['London', 'Tokyo', 'New York'] // placeholder list
-  const emptyCities = []
-
-  const styles = getStyles(colors)
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.header}>Weather</Text>
+        {/* Top area: header + search — stays clear */}
+        <Animated.View style={{ flex: 1, padding: 20, transform: [{ translateY }] }}>
+          <Animated.View style={{ opacity: isFocused ? 0 : 1 }}>
+            <Text style={styles.header}>Weather</Text>
+          </Animated.View>
 
-        <TextInput
-          style={styles.search}
-          placeholder='Search for a city in the US...'
-          placeholderTextColor={colors.textMuted + '80'}
-          value={search}
-          onChangeText={setSearch}
-        />
-        <ScrollView style={styles.scrollContent}>
-          {cities.map((item) => (
-            <Pressable
-              key={item}
-              style={styles.cityCard}
-              onPress={() => router.push(`/city/${item}`)}
-            >
-              <Text style={styles.cityName}>{item}</Text>
-            </Pressable>
-          ))}
-
-          <Text style={[styles.header, styles.headerStorm]}>Storm Watch</Text>
-          <View style={styles.stormBox}>
-            <Text style={styles.stormText}>No active alerts</Text>
+          <View style={styles.search}>
+            <Ionicons
+              style={styles.icon}
+              name='search'
+              size={20}
+              color={colors.textMuted}
+            />
+            <TextInput
+              style={styles.searchInput}
+              placeholder='Search for a city in the US...'
+              placeholderTextColor={colors.textMuted + '80'}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              value={search}
+              onChangeText={setSearch}
+            />
           </View>
-        </ScrollView>
+          <ScrollView style={styles.scrollContent}>
+            {cities.map((item) => (
+              <Pressable
+                key={item}
+                style={styles.cityCard}
+                onPress={() => router.push(`/city/${item}`)}
+              >
+                <Text style={styles.cityName}>{item}</Text>
+              </Pressable>
+            ))}
+
+            <Text style={[styles.header, styles.headerStorm]}>Storm Watch</Text>
+            <View style={styles.stormBox}>
+              <Text style={styles.stormText}>No active alerts</Text>
+            </View>
+          </ScrollView>
+        </Animated.View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   )
@@ -58,19 +95,24 @@ export default function Home() {
 
 const getStyles = (colors: ColorScheme) =>
   StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.bg },
     scrollContent: { flex: 1 },
-    container: { flex: 1, padding: 20, backgroundColor: colors.bg },
     header: { fontSize: 32, fontWeight: 'bold', marginBottom: 20, color: colors.text },
     search: {
-      borderWidth: 1,
-      borderColor: colors.text + '40',
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'relative',
+      borderWidth: 2,
+      borderColor: colors.border + '80',
       backgroundColor: colors.bg,
-      color: colors.text,
-      padding: 12,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
       borderRadius: 10,
       marginBottom: 30,
+      zIndex: 10,
     },
-    sectionTitle: { fontSize: 20, fontWeight: '600', marginVertical: 10, color: colors.text },
+    icon: { marginRight: 8 },
+    searchInput: { flex: 1, height: 40, color: colors.text },
     cityCard: {
       padding: 16,
       borderRadius: 12,
@@ -80,16 +122,12 @@ const getStyles = (colors: ColorScheme) =>
       marginBottom: 10,
     },
     cityName: { fontSize: 18, color: colors.text },
-    headerStorm: {
-      marginTop: 30,
-    },
+    headerStorm: { marginTop: 30 },
     stormBox: {
       padding: 20,
       backgroundColor: colors.text + '10',
       borderRadius: 12,
       marginTop: 10,
     },
-    stormText: {
-      color: colors.text,
-    },
+    stormText: { color: colors.text },
   })
