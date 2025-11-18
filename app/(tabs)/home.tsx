@@ -24,79 +24,135 @@ export default function Home() {
   const insets = useSafeAreaInsets()
 
   const translateY = useRef(new Animated.Value(0)).current
+  const overlayOpacity = useRef(new Animated.Value(0)).current
 
   const handleFocus = () => {
     setIsFocused(true)
-    Animated.timing(translateY, {
-      toValue: -insets.top,
-      duration: 200,
-      useNativeDriver: true,
-    }).start()
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: -insets.top,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+
+      Animated.timing(overlayOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start()
   }
 
-  const handleBlur = () => {
+  const handleOverlayPress = () => {
     setIsFocused(false)
-    Animated.timing(translateY, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start()
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(overlayOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start()
   }
 
   const cities = ['London', 'Tokyo', 'New York'] // placeholder list
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <SafeAreaView style={styles.container}>
-        {/* Top area: header + search — stays clear */}
-        <Animated.View style={{ flex: 1, padding: 20, transform: [{ translateY }] }}>
-          <Animated.View style={{ opacity: isFocused ? 0 : 1 }}>
-            <Text style={styles.header}>Weather</Text>
-          </Animated.View>
-
-          <View style={styles.search}>
-            <Ionicons
-              style={styles.icon}
-              name='search'
-              size={20}
-              color={colors.textMuted}
-            />
-            <TextInput
-              style={styles.searchInput}
-              placeholder='Search for a city in the US...'
-              placeholderTextColor={colors.textMuted + '80'}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              value={search}
-              onChangeText={setSearch}
-            />
-          </View>
-          <ScrollView style={styles.scrollContent}>
-            {cities.map((item) => (
-              <Pressable
-                key={item}
-                style={styles.cityCard}
-                onPress={() => router.push(`/city/${item}`)}
-              >
-                <Text style={styles.cityName}>{item}</Text>
-              </Pressable>
-            ))}
-
-            <Text style={[styles.header, styles.headerStorm]}>Storm Watch</Text>
-            <View style={styles.stormBox}>
-              <Text style={styles.stormText}>No active alerts</Text>
-            </View>
-          </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <Animated.View
+        style={{
+          flex: 1,
+          padding: 20,
+          transform: [{ translateY }],
+          position: 'relative',
+          zIndex: 10,
+        }}
+      >
+        <Animated.View style={{ opacity: isFocused ? 0 : 1 }}>
+          <Text style={styles.header}>Weather</Text>
         </Animated.View>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+        {/* Search Box */}
+        <View style={styles.search}>
+          <Ionicons
+            style={styles.icon}
+            name='search'
+            size={20}
+            color={colors.textMuted}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder='Search for a city in the US...'
+            placeholderTextColor={colors.textMuted + '80'}
+            onFocus={handleFocus}
+            onBlur={handleOverlayPress}
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+      </Animated.View>
+      {/* City List */}
+      <ScrollView style={styles.scrollContent}>
+        {cities.map((item) => (
+          <Pressable
+            key={item}
+            style={styles.cityCard}
+            onPress={() => router.push(`/city/${item}`)}
+          >
+            <Text style={styles.cityName}>{item}</Text>
+          </Pressable>
+        ))}
+
+        <Text style={[styles.header, styles.headerStorm]}>Storm Watch</Text>
+        <View style={styles.stormBox}>
+          <Text style={styles.stormText}>No active alerts</Text>
+        </View>
+      </ScrollView>
+
+      {/* Overlay */}
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss()
+          handleOverlayPress()
+        }}
+      >
+        <Animated.View
+          pointerEvents={isFocused ? 'auto' : 'none'}
+          style={[
+            styles.overlay,
+
+            {
+              opacity: overlayOpacity.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1], // full opacity when focused
+              }),
+              transform: [{ translateY }],
+            },
+          ]}
+        />
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   )
 }
 
 const getStyles = (colors: ColorScheme) =>
   StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.bg },
-    scrollContent: { flex: 1 },
+    overlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: colors.bg,
+      zIndex: 5,
+      elevation: 5,
+    },
+
+    scrollContent: { paddingHorizontal: 20 },
     header: { fontSize: 32, fontWeight: 'bold', marginBottom: 20, color: colors.text },
     search: {
       flexDirection: 'row',
@@ -110,6 +166,7 @@ const getStyles = (colors: ColorScheme) =>
       borderRadius: 10,
       marginBottom: 30,
       zIndex: 10,
+      elevation: 10,
     },
     icon: { marginRight: 8 },
     searchInput: { flex: 1, height: 40, color: colors.text },
