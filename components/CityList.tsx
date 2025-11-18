@@ -1,37 +1,52 @@
-import { ColorScheme, useTheme } from '@/hooks/useTheme'
-import { router } from 'expo-router'
-import { Pressable, StyleSheet, Text } from 'react-native'
+import CityListItem from './CityListItem'
 
-const cities: string[] = ['London', 'Tokyo', 'New York'] // placeholder list
+// Test Values
+// ------------------------
+const cities = [
+  {
+    cityName: 'New York, NY',
+    city: 'New York',
+    currentTemp: 60,
+    time: '10:00 AM',
+    description: 'Sunny',
+    high: 65,
+    low: 55,
+  },
+  {
+    cityName: 'London, UK',
+    city: 'London',
+    currentTemp: 55,
+    time: '11:00 AM',
+    description: 'Cloudy',
+    high: 60,
+    low: 50,
+  },
+  {
+    cityName: 'Tokyo, JP',
+    city: 'Tokyo',
+    currentTemp: 62,
+    time: '12:00 PM',
+    description: 'Rainy',
+    high: 68,
+    low: 58,
+  },
+]
+// ------------------------
 
 export default function CityList() {
-  const { colors } = useTheme()
-  const styles = getStyles(colors)
-
   return (
     <>
-      {cities.map((item) => (
-        <Pressable
-          key={item}
-          style={styles.cityCard}
-          onPress={() => router.push(`/city/${item}`)}
-        >
-          <Text style={styles.cityName}>{item}</Text>
-        </Pressable>
+      {cities.map((city) => (
+        <CityListItem
+          key={city.cityName}
+          city={city.city}
+          currentTemp={city.currentTemp}
+          time={city.time}
+          description={city.description}
+          high={city.high}
+          low={city.low}
+        />
       ))}
     </>
   )
 }
-
-const getStyles = (colors: ColorScheme) =>
-  StyleSheet.create({
-    cityName: { fontSize: 18, color: colors.text },
-    cityCard: {
-      padding: 16,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.bg,
-      marginBottom: 10,
-    },
-  })
