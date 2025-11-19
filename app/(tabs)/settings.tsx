@@ -1,4 +1,5 @@
 import { ColorScheme, useTheme } from '@/hooks/useTheme'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
 import { Alert, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -17,7 +18,9 @@ export default function Settings() {
       {
         text: 'Logout',
         style: 'destructive',
-        onPress: () => {
+        onPress: async () => {
+          // Logout user
+          await AsyncStorage.setItem('loggedIn', 'false')
           // Navigate to splash screen
           router.replace('/')
         },

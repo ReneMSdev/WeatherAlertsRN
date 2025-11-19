@@ -1,5 +1,6 @@
 import { ColorScheme, useTheme } from '@/hooks/useTheme'
 import { getOrCreateDeviceId } from '@/utils/deviceId'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Device from 'expo-device'
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
@@ -26,10 +27,19 @@ export default function SplashScreen() {
   const platform = Platform.OS
   const osVersion = Device.osVersion
 
-  // Optional: placeholder for background tasks
+  // Auto Login on App Launch
   useEffect(() => {
-    // Background tasks can be added here if needed
-  }, [])
+    const init = async () => {
+      await getOrCreateDeviceId()
+      const loggedIn = await AsyncStorage.getItem('loggedIn')
+
+      if (loggedIn === 'true') {
+        router.replace('/(tabs)/home')
+        return
+      }
+    }
+    init()
+  }, [router])
 
   const handleContinueAsGuest = async (): Promise<void> => {
     try {
@@ -37,7 +47,8 @@ export default function SplashScreen() {
 
       const deviceId: string = await getOrCreateDeviceId()
 
-      const res = await fetch(deviceUrl, {
+      // Register/ create session on server
+      await fetch(deviceUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,6 +60,9 @@ export default function SplashScreen() {
           pushToken: null,
         }),
       })
+      // Mark the user as logged in for next launch
+      await AsyncStorage.setItem('loggedIn', 'true')
+
       router.replace('/(tabs)/home')
     } catch (error) {
       console.error('Error setting up deviceId:', error)

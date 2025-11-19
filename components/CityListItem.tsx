@@ -56,16 +56,16 @@ const getStyles = (colors: ColorScheme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 12,
-      paddingHorizontal: 16,
+      paddingVertical: 16,
+      paddingHorizontal: 20,
       borderRadius: 10,
       marginVertical: 6,
       backgroundColor: colors.bg, // keep same bg by default, or change for card
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: colors.border,
       // subtle shadow for Android/iOS
       elevation: 1,
-      shadowColor: '#000',
+      shadowColor: colors.shadow,
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.06,
       shadowRadius: 2,
@@ -109,10 +109,5 @@ const getStyles = (colors: ColorScheme) =>
       fontSize: 12,
       color: colors.textMuted,
       marginTop: 6,
-    },
-
-    low: {
-      color: colors.textMuted,
-      opacity: 0.9,
     },
   })

@@ -34,6 +34,8 @@ export default function SearchBar({
         onBlur={handleOverlayPress}
         value={search}
         onChangeText={setSearch}
+        returnKeyType='search'
+        enablesReturnKeyAutomatically
       />
     </View>
   )
