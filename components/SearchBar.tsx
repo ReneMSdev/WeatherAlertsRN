@@ -29,7 +29,7 @@ export default function SearchBar({
       <TextInput
         style={styles.searchInput}
         placeholder='Search for a city in the US...'
-        placeholderTextColor={colors.textMuted + '80'}
+        placeholderTextColor={colors.textMuted + '90'}
         onFocus={handleFocus}
         onBlur={handleOverlayPress}
         value={search}

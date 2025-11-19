@@ -1,6 +1,8 @@
+import Autocomplete from '@/components/Autocomplete'
 import CityList from '@/components/CityList'
 import Overlay from '@/components/Overlay'
 import SearchBar from '@/components/SearchBar'
+import useAutocomplete from '@/hooks/useAutocomplete'
 import { ColorScheme, useTheme } from '@/hooks/useTheme'
 import { useRef, useState } from 'react'
 import { Animated, ScrollView, StyleSheet, Text } from 'react-native'
@@ -15,6 +17,9 @@ export default function Home() {
 
   const translateY = useRef(new Animated.Value(0)).current
   const overlayOpacity = useRef(new Animated.Value(0)).current
+
+  const sessionToken = 'test123'
+  const suggestions = useAutocomplete(search, sessionToken)
 
   const handleFocus = () => {
     setIsFocused(true)
@@ -68,6 +73,14 @@ export default function Home() {
           handleOverlayPress={handleOverlayPress}
           search={search}
           setSearch={setSearch}
+        />
+
+        {/* Autocomplete */}
+        <Autocomplete
+          suggestions={suggestions}
+          onSelect={(item) => {
+            setSearch(item.description)
+          }}
         />
       </Animated.View>
 
