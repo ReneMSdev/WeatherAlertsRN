@@ -4,6 +4,7 @@ import { ColorScheme, useTheme } from '../hooks/useTheme'
 
 type Props = {
   city: string
+  state: string
   currentTemp: number | string
   time?: string
   description?: string
@@ -13,6 +14,7 @@ type Props = {
 
 export default function CityListItem({
   city,
+  state,
   currentTemp,
   time,
   description,
@@ -27,7 +29,7 @@ export default function CityListItem({
   return (
     <Pressable
       style={styles.container}
-      onPress={() => router.push(`/city/${city}`)}
+      onPress={() => router.push(`/city/${city}?state=${state}`)}
     >
       <View style={styles.left}>
         <Text style={styles.cityName}>{city}</Text>

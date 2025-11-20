@@ -6,6 +6,7 @@ const cities = [
   {
     cityName: 'New York, NY',
     city: 'New York',
+    state: 'NY',
     currentTemp: 60,
     time: '10:00 AM',
     description: 'Sunny',
@@ -13,8 +14,9 @@ const cities = [
     low: 55,
   },
   {
-    cityName: 'London, UK',
-    city: 'London',
+    cityName: 'Austin, TX',
+    city: 'Austin',
+    state: 'TX',
     currentTemp: 55,
     time: '11:00 AM',
     description: 'Cloudy',
@@ -22,8 +24,9 @@ const cities = [
     low: 50,
   },
   {
-    cityName: 'Tokyo, JP',
-    city: 'Tokyo',
+    cityName: 'Columbia, MO',
+    city: 'Columbia',
+    state: 'MO',
     currentTemp: 62,
     time: '12:00 PM',
     description: 'Rainy',
@@ -40,6 +43,7 @@ export default function CityList() {
         <CityListItem
           key={city.cityName}
           city={city.city}
+          state={city.state}
           currentTemp={city.currentTemp}
           time={city.time}
           description={city.description}
